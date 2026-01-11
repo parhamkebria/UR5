@@ -2,6 +2,8 @@
 
 A complete implementation of analytical kinematic and dynamic models for the UR5 robot from Universal Robots, with physics-based simulation and 3D visualization.
 
+![UR5 Robot Model](UR5_model.png)
+
 ## 🚀 Quick Start
 
 ```bash
