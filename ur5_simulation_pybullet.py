@@ -33,12 +33,20 @@ class UR5SimulationPyBullet:
         # Load ground plane
         self.plane_id = p.loadURDF("plane.urdf")
         
-        # Joint information
-        self.n_joints = 6
+        # Load UR5 robot from URDF (with realistic meshes)
+        self.robot_id = p.loadURDF("ur5_pybullet.urdf",
+                                    basePosition=[0, 0, 0.1],
+                                    useFixedBase=True)
         
-        # Create UR5 robot from scratch using DH parameters
-        self.robot_id = self.create_ur5_robot()
-        self.joint_indices = list(range(self.n_joints))
+        # Get joint information
+        self.n_joints = 0
+        self.joint_indices = []
+        for i in range(p.getNumJoints(self.robot_id)):
+            info = p.getJointInfo(self.robot_id, i)
+            if info[2] == p.JOINT_REVOLUTE:  # Only revolute joints
+                self.joint_indices.append(i)
+                self.n_joints += 1
+        
         self.joint_names = [
             'shoulder_pan', 'shoulder_lift', 'elbow',
             'wrist_1', 'wrist_2', 'wrist_3'
@@ -50,189 +58,6 @@ class UR5SimulationPyBullet:
         self.max_force = np.array([150, 150, 150, 28, 28, 28])
         
         print("UR5 PyBullet Simulation initialized!")
-        
-    def create_ur5_robot(self):
-        """Create UR5 robot using primitive shapes based on DH parameters."""
-        base_position = [0, 0, 0.1]
-        base_orientation = p.getQuaternionFromEuler([0, 0, 0])
-        
-        # Visual and collision shapes for each link
-        visual_shapes = []
-        collision_shapes = []
-        link_masses = [3.7, 8.393, 2.275, 1.219, 1.219, 0.1879]
-        link_positions = []
-        link_orientations = []
-        link_inertial_frame_positions = []
-        link_inertial_frame_orientations = []
-        joint_types = []
-        joint_axes = []
-        parent_indices = []
-        
-        # DH parameters
-        d = [0.08916, 0, 0, 0.10915, 0.09456, 0.0823]
-        a = [0, 0, 0.425, 0.39225, 0, 0]
-        alpha = [0, np.pi/2, 0, 0, -np.pi/2, np.pi/2]
-        
-        # Link 1: Shoulder
-        visual_shapes.append(p.createVisualShape(
-            shapeType=p.GEOM_CYLINDER,
-            radius=0.06,
-            length=0.1,
-            rgbaColor=[0.2, 0.2, 0.8, 1]
-        ))
-        collision_shapes.append(p.createCollisionShape(
-            shapeType=p.GEOM_CYLINDER,
-            radius=0.06,
-            height=0.1
-        ))
-        link_positions.append([0, 0, d[0]])
-        link_orientations.append(p.getQuaternionFromEuler([0, 0, 0]))
-        link_inertial_frame_positions.append([0, 0, 0])
-        link_inertial_frame_orientations.append([0, 0, 0, 1])
-        joint_types.append(p.JOINT_REVOLUTE)
-        joint_axes.append([0, 0, 1])
-        parent_indices.append(0)  # Parent is base
-        
-        # Link 2: Upper arm
-        visual_shapes.append(p.createVisualShape(
-            shapeType=p.GEOM_CAPSULE,
-            radius=0.05,
-            length=0.425,
-            rgbaColor=[0.8, 0.2, 0.2, 1]
-        ))
-        collision_shapes.append(p.createCollisionShape(
-            shapeType=p.GEOM_CAPSULE,
-            radius=0.05,
-            height=0.425
-        ))
-        link_positions.append([0, 0.13585, 0])
-        link_orientations.append(p.getQuaternionFromEuler([0, np.pi/2, 0]))
-        link_inertial_frame_positions.append([0, 0, 0])
-        link_inertial_frame_orientations.append([0, 0, 0, 1])
-        joint_types.append(p.JOINT_REVOLUTE)
-        joint_axes.append([0, 1, 0])
-        parent_indices.append(0)  # Parent is link 1 (index 0 in link list)
-        
-        # Link 3: Forearm
-        visual_shapes.append(p.createVisualShape(
-            shapeType=p.GEOM_CAPSULE,
-            radius=0.045,
-            length=0.39225,
-            rgbaColor=[0.2, 0.8, 0.2, 1]
-        ))
-        collision_shapes.append(p.createCollisionShape(
-            shapeType=p.GEOM_CAPSULE,
-            radius=0.045,
-            height=0.39225
-        ))
-        link_positions.append([0.425, 0, 0])
-        link_orientations.append(p.getQuaternionFromEuler([0, 0, 0]))
-        link_inertial_frame_positions.append([0, 0, 0])
-        link_inertial_frame_orientations.append([0, 0, 0, 1])
-        joint_types.append(p.JOINT_REVOLUTE)
-        joint_axes.append([0, 1, 0])
-        parent_indices.append(1)  # Parent is link 2
-        
-        # Link 4: Wrist 1
-        visual_shapes.append(p.createVisualShape(
-            shapeType=p.GEOM_CYLINDER,
-            radius=0.035,
-            length=0.08,
-            rgbaColor=[0.2, 0.2, 0.8, 1]
-        ))
-        collision_shapes.append(p.createCollisionShape(
-            shapeType=p.GEOM_CYLINDER,
-            radius=0.035,
-            height=0.08
-        ))
-        link_positions.append([0.39225, 0, 0.10915])
-        link_orientations.append(p.getQuaternionFromEuler([0, 0, 0]))
-        link_inertial_frame_positions.append([0, 0, 0])
-        link_inertial_frame_orientations.append([0, 0, 0, 1])
-        joint_types.append(p.JOINT_REVOLUTE)
-        joint_axes.append([0, 0, 1])
-        parent_indices.append(2)  # Parent is link 3
-        
-        # Link 5: Wrist 2
-        visual_shapes.append(p.createVisualShape(
-            shapeType=p.GEOM_CYLINDER,
-            radius=0.035,
-            length=0.08,
-            rgbaColor=[0.8, 0.2, 0.2, 1]
-        ))
-        collision_shapes.append(p.createCollisionShape(
-            shapeType=p.GEOM_CYLINDER,
-            radius=0.035,
-            height=0.08
-        ))
-        link_positions.append([0, -0.09456, 0])
-        link_orientations.append(p.getQuaternionFromEuler([np.pi/2, 0, 0]))
-        link_inertial_frame_positions.append([0, 0, 0])
-        link_inertial_frame_orientations.append([0, 0, 0, 1])
-        joint_types.append(p.JOINT_REVOLUTE)
-        joint_axes.append([0, 1, 0])
-        parent_indices.append(3)  # Parent is link 4
-        
-        # Link 6: Wrist 3
-        visual_shapes.append(p.createVisualShape(
-            shapeType=p.GEOM_CYLINDER,
-            radius=0.03,
-            length=0.06,
-            rgbaColor=[0.2, 0.8, 0.2, 1]
-        ))
-        collision_shapes.append(p.createCollisionShape(
-            shapeType=p.GEOM_CYLINDER,
-            radius=0.03,
-            height=0.06
-        ))
-        link_positions.append([0, 0, 0.0823])
-        link_orientations.append(p.getQuaternionFromEuler([0, 0, 0]))
-        link_inertial_frame_positions.append([0, 0, 0])
-        link_inertial_frame_orientations.append([0, 0, 0, 1])
-        joint_types.append(p.JOINT_REVOLUTE)
-        joint_axes.append([0, 0, 1])
-        parent_indices.append(4)  # Parent is link 5
-        
-        # Create base
-        base_visual = p.createVisualShape(
-            shapeType=p.GEOM_CYLINDER,
-            radius=0.08,
-            length=0.1,
-            rgbaColor=[0.5, 0.5, 0.5, 1]
-        )
-        base_collision = p.createCollisionShape(
-            shapeType=p.GEOM_CYLINDER,
-            radius=0.08,
-            height=0.1
-        )
-        
-        # Create multi-body
-        robot_id = p.createMultiBody(
-            baseMass=4.0,
-            baseCollisionShapeIndex=base_collision,
-            baseVisualShapeIndex=base_visual,
-            basePosition=base_position,
-            baseOrientation=base_orientation,
-            linkMasses=link_masses,
-            linkCollisionShapeIndices=collision_shapes,
-            linkVisualShapeIndices=visual_shapes,
-            linkPositions=link_positions,
-            linkOrientations=link_orientations,
-            linkInertialFramePositions=link_inertial_frame_positions,
-            linkInertialFrameOrientations=link_inertial_frame_orientations,
-            linkParentIndices=parent_indices,
-            linkJointTypes=joint_types,
-            linkJointAxis=joint_axes
-        )
-        
-        # Set joint damping
-        for i in range(self.n_joints):
-            p.changeDynamics(robot_id, i, linearDamping=0.04, angularDamping=0.04)
-            # Disable collisions between adjacent links
-            if i > 0:
-                p.setCollisionFilterPair(robot_id, robot_id, i-1, i, 0)
-        
-        return robot_id
     
     def reset(self, q_init=None):
         """Reset robot to initial configuration."""
@@ -240,7 +65,7 @@ class UR5SimulationPyBullet:
             q_init = np.zeros(6)
         
         for i, q in enumerate(q_init):
-            p.resetJointState(self.robot_id, i, q)
+            p.resetJointState(self.robot_id, self.joint_indices[i], q)
     
     def set_target_positions(self, q_target, kp=None, kd=None, max_force=None):
         """Set target joint positions with PD control."""
