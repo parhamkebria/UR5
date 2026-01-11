@@ -115,7 +115,7 @@ M_numeric = M.subs(q_vals)
 
 ## 📚 References
 
-- Universal Robots UR5 technical specifications
+- [Universal Robots UR5 technical specifications](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.universal-robots.com/media/50588/ur5_en.pdf)
 - Denavit-Hartenberg parameters convention
 - MuJoCo physics engine documentation
 
