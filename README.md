@@ -30,7 +30,8 @@ python ur5_animation.py
 ### Documentation
 - **QUICKSTART.md** - Get running in 2 minutes
 - **SIMULATION_README.md** - Detailed simulation guide
-- **GAZEBO_SETUP.md** - Realistic Gazebo simulation (ROS-free)
+- **GAZEBO_SETUP.md** - Realistic Gazebo simulation (ROS-free, Linux)
+- **DOCKER_GAZEBO.md** - Run Gazebo on macOS via Docker (advanced)
 
 ## 🎯 Features
 
