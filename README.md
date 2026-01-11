@@ -30,8 +30,9 @@ python ur5_animation.py
 ### Documentation
 - **QUICKSTART.md** - Get running in 2 minutes
 - **SIMULATION_README.md** - Detailed simulation guide
-- **GAZEBO_SETUP.md** - Realistic Gazebo simulation (ROS-free, Linux)
-- **DOCKER_GAZEBO.md** - Run Gazebo on macOS via Docker (advanced)
+- **GAZEBO_SETUP.md** - Gazebo Classic 11 (Linux only, ROS-free)
+- **GAZEBO_JETTY_MACOS.md** - New Gazebo on macOS from source ⭐
+- **DOCKER_GAZEBO.md** - Run Gazebo Classic via Docker (fallback)
 
 ## 🎯 Features
 
@@ -90,15 +91,26 @@ python ur5_gazebo_simulation.py
 
 **Installation:** See [GAZEBO_SETUP.md](GAZEBO_SETUP.md)
 
-#### 🍎 macOS: MuJoCo Interactive Viewer
+#### 🍎 macOS: Multiple Options
+
+**Option 1: MuJoCo (Easiest, 5 min setup)**
 ```bash
 mjpython ur5_simulation.py
 ```
-**Features:**
 - Fast, interactive 3D visualization
 - Real-time physics
-- Better macOS integration than Gazebo
 - Click-and-drag camera control
+
+**Option 2: New Gazebo Jetty (Best graphics, 1-2 hr setup)**
+```bash
+# See GAZEBO_JETTY_MACOS.md for installation
+source ~/workspace/install/setup.zsh
+gz sim ur5_robot.sdf
+```
+- Professional rendering with shadows
+- Modern architecture
+- Active development
+- Compile from source required
 
 #### 🪟 Windows: Multiple Options
 ```bash
