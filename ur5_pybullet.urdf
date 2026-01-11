@@ -5,10 +5,10 @@
   <link name="base_link">
     <visual>
       <geometry>
-        <cylinder radius="0.08" length="0.1"/>
+        <mesh filename="meshes/visual/base.stl" scale="1 1 1"/>
       </geometry>
       <material name="grey">
-        <color rgba="0.5 0.5 0.5 1"/>
+        <color rgba="0.3 0.3 0.3 1"/>
       </material>
     </visual>
     <collision>
@@ -26,10 +26,10 @@
   <link name="shoulder_link">
     <visual>
       <geometry>
-        <cylinder radius="0.06" length="0.1"/>
+        <mesh filename="meshes/visual/shoulder.stl" scale="1 1 1"/>
       </geometry>
       <material name="blue">
-        <color rgba="0.2 0.2 0.8 1"/>
+        <color rgba="0.49 0.678 0.8 1"/>
       </material>
     </visual>
     <collision>
@@ -55,12 +55,11 @@
   <!-- Upper Arm Link -->
   <link name="upper_arm_link">
     <visual>
-      <origin xyz="0 0 0.2125" rpy="0 0 0"/>
       <geometry>
-        <cylinder radius="0.05" length="0.425"/>
+        <mesh filename="meshes/visual/upperarm.stl" scale="1 1 1"/>
       </geometry>
-      <material name="red">
-        <color rgba="0.8 0.2 0.2 1"/>
+      <material name="blue">
+        <color rgba="0.49 0.678 0.8 1"/>
       </material>
     </visual>
     <collision>
@@ -88,12 +87,11 @@
   <!-- Forearm Link -->
   <link name="forearm_link">
     <visual>
-      <origin xyz="0 0 0.196125" rpy="0 0 0"/>
       <geometry>
-        <cylinder radius="0.045" length="0.39225"/>
+        <mesh filename="meshes/visual/forearm.stl" scale="1 1 1"/>
       </geometry>
-      <material name="green">
-        <color rgba="0.2 0.8 0.2 1"/>
+      <material name="blue">
+        <color rgba="0.49 0.678 0.8 1"/>
       </material>
     </visual>
     <collision>
@@ -122,10 +120,10 @@
   <link name="wrist_1_link">
     <visual>
       <geometry>
-        <cylinder radius="0.035" length="0.08"/>
+        <mesh filename="meshes/visual/wrist1.stl" scale="1 1 1"/>
       </geometry>
-      <material name="blue">
-        <color rgba="0.2 0.2 0.8 1"/>
+      <material name="black">
+        <color rgba="0.1 0.1 0.1 1"/>
       </material>
     </visual>
     <collision>
@@ -152,10 +150,10 @@
   <link name="wrist_2_link">
     <visual>
       <geometry>
-        <cylinder radius="0.035" length="0.08"/>
+        <mesh filename="meshes/visual/wrist2.stl" scale="1 1 1"/>
       </geometry>
-      <material name="red">
-        <color rgba="0.8 0.2 0.2 1"/>
+      <material name="black">
+        <color rgba="0.1 0.1 0.1 1"/>
       </material>
     </visual>
     <collision>
@@ -182,10 +180,10 @@
   <link name="wrist_3_link">
     <visual>
       <geometry>
-        <cylinder radius="0.03" length="0.06"/>
+        <mesh filename="meshes/visual/wrist3.stl" scale="1 1 1"/>
       </geometry>
-      <material name="green">
-        <color rgba="0.2 0.8 0.2 1"/>
+      <material name="metal">
+        <color rgba="0.7 0.7 0.7 1"/>
       </material>
     </visual>
     <collision>
