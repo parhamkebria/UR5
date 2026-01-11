@@ -130,6 +130,24 @@ M_numeric = M.subs(q_vals)
 **Computation takes long time**  
 → Normal for symbolic computation (~30 seconds to 2 minutes)
 
-## 📄 License
+## � Citation
+
+If you use this work in your research, please cite:
+
+```bibtex
+@inproceedings{kebria2016kinematic,
+  title={Kinematic and dynamic modelling of UR5 manipulator},
+  author={Kebria, Parham M and Al-Wais, Saba and Abdi, Hamid and Nahavandi, Saeid},
+  booktitle={2016 IEEE international conference on systems, man, and cybernetics (SMC)},
+  pages={004229--004234},
+  year={2016},
+  organization={IEEE},
+  doi={10.1109/SMC.2016.7844896}
+}
+```
+
+**Paper:** [IEEE Xplore](https://doi.org/10.1109/SMC.2016.7844896)
+
+## �📄 License
 
 See `LICENSE` and `license.txt` for details.
