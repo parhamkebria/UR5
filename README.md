@@ -1,10 +1,14 @@
 # UR5 Robot Dynamics and Simulation
 
-A complete implementation of analytical kinematic and dynamic models for the UR5 robot from Universal Robots, with physics-based simulation and 3D visualization.
+<div style="display: flex; align-items: center; gap: 20px;">
+  <div style="flex: 1;">
+    <p>A complete implementation of analytical kinematic and dynamic models for the UR5 robot from Universal Robots, with physics-based simulation and 3D visualization.</p>
+  </div>
+  <div>
+    <img src="UR5.png" width="150" alt="UR5 Robot Model">
+  </div>
+</div>
 
-<a align="left">
-  <img src="UR5.png" width="150" alt="UR5 Robot Model">
-</a>
 
 ## 🚀 Quick Start
 
