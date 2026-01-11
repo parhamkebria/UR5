@@ -21,13 +21,16 @@ python ur5_animation.py
 - **UR5.m** - Original MATLAB implementation with DH parameters
 - **UR5.py** - Python port with symbolic dynamics computation
 - **ur5_model.xml** - MuJoCo physics model
-- **ur5_animation.py** - 3D visualization with matplotlib ⭐ **USE THIS**
+- **ur5_robot.urdf** - Gazebo/ROS robot description
+- **ur5_animation.py** - 3D visualization with matplotlib ⭐ **EASIEST**
 - **ur5_simulation.py** - MuJoCo simulation (headless mode)
+- **ur5_gazebo_simulation.py** - Gazebo simulation (realistic graphics) 🎨 **BEAUTIFUL**
 - **run_simulation.py** - Interactive launcher
 
 ### Documentation
 - **QUICKSTART.md** - Get running in 2 minutes
 - **SIMULATION_README.md** - Detailed simulation guide
+- **GAZEBO_SETUP.md** - Realistic Gazebo simulation (ROS-free)
 
 ## 🎯 Features
 
@@ -49,6 +52,12 @@ pip install mujoco
 
 # For visualization
 pip install matplotlib pillow
+
+# For Gazebo (realistic graphics) - Linux only
+# Ubuntu/Debian:
+sudo apt install gazebo11 libgazebo11-dev
+pip install pygazebo protobuf
+# macOS: Gazebo 11 deprecated, use MuJoCo/Matplotlib instead
 ```
 
 ## 🎮 Usage Examples
@@ -59,17 +68,54 @@ python UR5.py
 ```
 **Output:** `UR5.pkl`, `UR5T.txt`, `UR5M.txt`, `UR5C.txt`, `UR5G.txt`, `UR5J.txt`
 
-### Create Animation
+### Create Animation (Works on All Platforms) ⭐
 ```bash
 python ur5_animation.py
 ```
-**Output:** `ur5_animation.gif`, `ur5_configurations.png`
+**Output:** `ur5_animation.gif`, `ur5_configurations.png`  
+**Best for:** Quick visualization, presentations, no setup required
 
-### Headless Simulation
+### Platform-Specific Simulations
+
+#### 🐧 Linux: Gazebo (Industry Standard) 🎨
+```bash
+python ur5_gazebo_simulation.py
+```
+**Features:**
+- Professional-quality 3D graphics
+- Realistic lighting and shadows
+- Industry-standard simulation
+- ROS-compatible (optional)
+
+**Installation:** See [GAZEBO_SETUP.md](GAZEBO_SETUP.md)
+
+#### 🍎 macOS: MuJoCo Interactive Viewer
+```bash
+mjpython ur5_simulation.py
+```
+**Features:**
+- Fast, interactive 3D visualization
+- Real-time physics
+- Better macOS integration than Gazebo
+- Click-and-drag camera control
+
+#### 🪟 Windows: Multiple Options
+```bash
+# Option 1: Matplotlib (easiest)
+python ur5_animation.py
+
+# Option 2: MuJoCo headless
+python ur5_simulation.py no-viewer
+
+# Option 3: WSL2 + Gazebo (advanced)
+# Use Linux instructions in WSL
+```
+
+### Headless Simulation (All Platforms)
 ```bash
 python ur5_simulation.py no-viewer
 ```
-**Output:** Terminal output with mass matrix and Jacobian
+**Output:** Terminal output with mass matrix, Jacobian, dynamics
 
 ### Interactive Launcher
 ```bash
@@ -118,6 +164,25 @@ M_numeric = M.subs(q_vals)
 - [Universal Robots UR5 technical specifications](chrome-extension://efaidnbmnnnibpcajpcglclefindmkaj/https://www.universal-robots.com/media/50588/ur5_en.pdf)
 - Denavit-Hartenberg parameters convention
 - MuJoCo physics engine documentation
+
+## 🎯 Which Simulator Should I Use?
+
+| Feature | Gazebo (Linux) | MuJoCo (macOS) | Matplotlib (All) |
+|---------|----------------|----------------|------------------|
+| **Platforms** | Linux only | macOS, Linux | All platforms |
+| **Graphics Quality** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
+| **Setup Difficulty** | Hard | Easy | Easiest |
+| **Real-time Control** | ✅ Yes | ✅ Yes | ❌ No |
+| **Lighting/Shadows** | ✅ Professional | ⚠️ Basic | ❌ No |
+| **Export GIF/Video** | ⚠️ Manual | ⚠️ Manual | ✅ Automatic |
+| **Community Size** | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ |
+| **Best For** | Research, ROS projects | macOS users, ML | Quick viz, papers |
+
+**Quick Recommendations:**
+- **Linux users**: Use Gazebo for best graphics and ROS compatibility
+- **macOS users**: Use MuJoCo interactive viewer (mjpython)
+- **Everyone**: Use Matplotlib for quick, reliable visualization
+- **Paper/presentation**: Matplotlib creates publication-ready figures
 
 ## 🔧 Troubleshooting
 
