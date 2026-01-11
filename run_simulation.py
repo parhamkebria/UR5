@@ -27,10 +27,6 @@ def print_menu():
     print("     - Prints dynamics info")
     print("     Command: python ur5_simulation.py no-viewer")
     print()
-    print("  4. PyBullet Simulation (Alternative)")
-    print("     - Alternative physics engine")
-    print("     Command: python ur5_simulation_pybullet.py")
-    print()
     print("="*60)
 
 if __name__ == "__main__":
@@ -39,7 +35,7 @@ if __name__ == "__main__":
     if len(sys.argv) > 1:
         choice = sys.argv[1]
     else:
-        choice = input("\nEnter choice (1-4) or press Enter for default [1]: ").strip()
+        choice = input("\nEnter choice (1-3) or press Enter for default [1]: ").strip()
         if not choice:
             choice = "1"
     
@@ -52,9 +48,6 @@ if __name__ == "__main__":
     elif choice == "3":
         print("\n▶ Running No Viewer Mode...")
         subprocess.run([sys.executable, "ur5_simulation.py", "no-viewer"])
-    elif choice == "4":
-        print("\n▶ Launching PyBullet Simulation...")
-        subprocess.run([sys.executable, "ur5_simulation_pybullet.py"])
     else:
         print(f"\n❌ Invalid choice: {choice}")
         sys.exit(1)

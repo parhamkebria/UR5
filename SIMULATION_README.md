@@ -1,33 +1,34 @@
-# UR5 Robot Simulation
+# UR5 Robot Simulation - Complete Guide
 
-This package contains analytical dynamics computation and physics-based simulation of the UR5 robot arm.
+This package provides comprehensive analytical dynamics computation and physics-based simulation of the UR5 robot arm.
 
-## Files
+## 📦 Installation
 
-- **UR5.py** - Analytical dynamics computation using symbolic math (SymPy)
-- **ur5_model.xml** - MuJoCo robot model definition
-- **ur5_simulation.py** - MuJoCo-based simulation with interactive visualization
-- **ur5_simulation_pybullet.py** - PyBullet-based simulation (alternative)
-
-## Installation
-
-### For MuJoCo Simulation (Recommended)
-
+### Complete Installation
 ```bash
-pip install mujoco numpy
+pip install mujoco numpy sympy matplotlib pillow
 ```
 
-### For PyBullet Simulation (Alternative)
-
+### Minimal (dynamics only)
 ```bash
-pip install pybullet numpy
+pip install numpy sympy
 ```
 
-### For Analytical Dynamics
-
+### Recommended (simulation + visualization)
 ```bash
-pip install sympy numpy
+pip install mujoco numpy matplotlib
 ```
+
+## 📁 File Overview
+
+| File | Type | Purpose |
+|------|------|---------|
+| `UR5.m` | MATLAB | Original implementation |
+| `UR5.py` | Python | Symbolic dynamics computation |
+| `ur5_model.xml` | XML | MuJoCo robot model |
+| `ur5_animation.py` | Python | 3D visualization ⭐ |
+| `ur5_simulation.py` | Python | MuJoCo headless simulation |
+| `run_simulation.py` | Python | Interactive launcher |
 
 ## Usage
 
@@ -48,116 +49,240 @@ This computes:
 
 Results are saved to `UR5.pkl` and text files.
 
-### 2. Run MuJoCo Simulation
+### 2. Run 3D Visualization
 
-Interactive simulation with 3D visualization:
+**Recommended** - Always works, creates output files:
 
 ```bash
-python ur5_simulation.py
+python ur5_animation.py
 ```
 
-**Controls:**
-- Mouse drag to rotate view
-- Scroll to zoom
-- The robot will automatically move through waypoints
-- Press ESC to exit
+**What happens:**
+- Simulates robot moving through 5 waypoints
+- Creates animated GIF (`ur5_animation.gif`)
+- Saves static configurations (`ur5_configurations.png`)
+- Opens interactive matplotlib window
 
-**Non-interactive mode:**
+### 3. Run Headless Simulation
+
+For servers or batch processing:
 
 ```bash
 python ur5_simulation.py no-viewer
 ```
 
-### 3. Run PyBullet Simulation
-
-Alternative physics engine:
-
-```bash
-python ur5_simulation_pybullet.py
-```
-
-## Features
+**Output:**
+- Joint positions and velocities
+- End-effector position
+- Mass matrix (6×6)
+- Jacobian matrix (6×6)
+- Matrix properties (symmetry, positive definiteness)
+🎯 Features
 
 ### Analytical Model (UR5.py)
-- Based on DH parameters from UR5 specifications
-- Symbolic computation of full dynamics
-- Exports equations for use in control algorithms
-- Compatible with MATLAB implementation
+✅ Based on DH parameters from UR5 specifications  
+✅ Symbolic computation of full dynamics (M, C, G)  
+✅ Forward kinematics transformation matrices  
+✅ 6×6 Jacobian computation  
+✅ Exports to Python pickle and text files  
+✅ Compatible with original MATLAB implementation  
+
+### Matplotlib Visualization (ur5_animation.py) ⭐
+✅ 3D animated robot motion  
+✅ Trajectory plotting  
+✅ Multiple waypoint demonstration  
+✅ Saves GIF animation  
+✅ Saves static configuration images  
+✅ Works on all systems (no display required)  
 
 ### MuJoCo Simulation (ur5_simulation.py)
-- Real-time physics simulation
-- PD position control
-- Trajectory following
-- Jacobian computation
-- Mass matrix extraction
-- Interactive 3D visualization
+✅ Accurate physics simulation  
+✅ PD position control  
+✅ Trajectory following  
+✅ Mass matrix extraction  
+✅ Jacobian computation at any configuration  
+✅ Headless mode for servers  
 
-### PyBullet Simulation (ur5_simulation_pybullet.py)
-- Alternative to MuJoCo with simpler installation
-- Built-in collision detection
-- Real-time rendering
-- PD control with force limits
+## 📐 Robot Model Details
 
-## Robot Specifications
+**DH Parameters:**
+| Link | α | a (m) | d (m) | θ |
+|------|---|-------|-------|---|
+| 1 | 0 | 0 | 0.08916 | q₁ |
+| 2 | π/2 | 0 | 0 | q₂ |
+| 3 | 0 | 0.425 | 0 | q₃ |
+| 4 | 0 | 0.39225 | 0.10915 | q₄ |
+| 5 | -π/2 | 0 | 0.09456 | q₅ |
+| 6 | π/2 | 0 | 0.0823 | q₆ |
 
-**UR5 DH Parameters:**
-- 6 DOF revolute joints
-- Total reach: ~850mm
-- Payload: 5 kg
+**Mass Properties:**
+- Link masses: [3.7, 8.393, 2.275, 1.219, 1.219, 0.1879] kg
+- Total robot mass: ~18.4 kg
+- Payload capacity: 5 kg
+
+**Workspace:**
+- Total reach: ~850 mm
 - Joint ranges: ±360° (most joints)
+- Shoulder-Elbow: 425 mm
+- Elbow-Wrist: 392.25 mm
 
-**Link parameters:**
-- Shoulder to elbow: 425mm
-- Elbow to wrist: 392.25mm
-- Mass: ~18.4 kg total
+## 💻 Code Examples
 
-## Example Code
+### Create and Run Animation
 
-### Set Target Position
+```python
+from ur5_animation import UR5Animator
+import numpy as np
+
+# Create animator
+animator = UR5Animator()
+
+# Define waypoints
+waypoints = [
+    np.array([0, -np.pi/4, np.pi/2, -np.pi/4, -np.pi/2, 0]),
+    np.array([np.pi/4, -np.pi/3, np.pi/3, -np.pi/6, -np.pi/2, 0])
+]
+
+# Simulate and record
+trajectory = animator.simulate_trajectory(waypoints, steps_per_waypoint=500)
+
+# Access trajectory data
+for frame in trajectory:
+    print(f"Time: {frame['time']:.3f}, EE: {frame['ee_pos']}")
+```
+
+### Load and Use Dynamics Data
+
+```python
+import pickle
+import numpy as np
+from sympy import symbols
+
+# Load computed dynamics
+with open('UR5.pkl', 'rb') as f:
+    data = pickle.load(f)
+
+T = data['T']        # Forward kinematics
+M = data['M']        # Mass matrix  
+C = data['C']        # Coriolis matrix
+G = data['G']        # Gravity vector
+J = data['Jacobi']   # Jacobian
+
+# Define joint variables
+q_1, q_2, q_3, q_4, q_5, q_6 = symbols('q_1 q_2 q_3 q_4 q_5 q_6')
+g = symbols('g')
+
+# Substitute numerical values
+q_vals = {
+    q_1: 0, q_2: -np.pi/4, q_3: np.pi/2,
+  # Extract Mass Matrix from MuJoCo
+
+```python
+import mujoco
+import numpy as np
+from ur5_simulation import UR5Simulation
+
+sim = UR5Simulation()
+
+# Set configuration
+q = np.array([0.1, -0.5, 0.8, -0.3, -1.2, 0.2])
+sim.reset(q)
+
+# Extract mass matrix
+M = np.zeros((sim.model.nv, sim.model.nv))
+mujoco.mj_fullM(sim.model, M, sim.data.qM)
+M_robot = M[:6, :6]
+
+print(f"Mass matrix:\n{M_robot}")
+print(f"Symmetric: {np.allclose(M_robot, M_robot.T)}")
+print(f"Positive definite: {np.all(np.linalg.eigvals(M_robot) > 0)}")
+```
+
+### Compute Jacobian
 
 ```python
 from ur5_simulation import UR5Simulation
 import numpy as np
 
 sim = UR5Simulation()
-q_target = np.array([0, -np.pi/4, np.pi/2, -np.pi/4, -np.pi/2, 0])
-sim.set_target_positions(q_target)
+q = np.array([0, -np.pi/4, np.pi/2, -np.pi/4, -np.pi/2, 0])
+sim.reset(q)
 
-for _ in range(1000):
-    sim.step()
-    state = sim.get_state()
-    print(f"EE position: {state['ee_pos']}")
-```
-
-### Compute Jacobian
-
-```python
-sim = UR5Simulation()
-J = sim.get_jacobian()  # 6x6 Jacobian matrix
+# Get Jacobian
+J = sim.get_jacobian()  # 6×6 matrix
 print(f"Jacobian:\n{J}")
+
+# Check manipulability
+det_J = np.linalg.det(J)
+print(f"Manipulability measure: {abs(det_J):.6f}")
 ```
 
-### Extract Mass Matrix
+## ✅ Validation
+
+Compare analytical model (UR5.py) with simulation (MuJoCo):
 
 ```python
-import mujoco
+import pickle
 import numpy as np
+from sympy import symbols
+from ur5_simulation import UR5Simulation
+import mujoco
 
+# 1. Load analytical dynamics
+with open('UR5.pkl', 'rb') as f:
+    analytical = pickle.load(f)
+
+# 2. Set same configuration
+q_test = [0.1, -0.5, 0.8, -0.3, -1.2, 0.2]
+
+# 3. Get numerical mass matrix from analytical model
+q_1, q_2, q_3, q_4, q_5, q_6 = symbols('q_1 q_2 q_3 q_4 q_5 q_6')
+subs_dict = {q_1: q_test[0], q_2: q_test[1], q_3: q_test[2],
+             q_4: q_test[3], q_5: q_test[4], q_6: q_test[5]}
+M_analytical = np.array(analytical['M'].subs(subs_dict)).astype(np.float64)
+
+# 4. Get mass matrix from MuJoCo
 sim = UR5Simulation()
-M = np.zeros((sim.model.nv, sim.model.nv))
-mujoco.mj_fullM(sim.model, M, sim.data.qM)
-print(f"Mass matrix:\n{M[:6, :6]}")
+sim.reset(np.array(q_test))
+M_mujoco = np.zeros((6, 6))
+mujoco.mj_fullM(sim.model, M_mujoco, sim.data.qM)
+
+# 5. Compare
+difference = np.abs(M_analytical - M_mujoco)
+print(f"Max difference: {np.max(difference):.6f}")
+print(f"Relative error: {np.max(difference / M_analytical):.2%}")
 ```
 
-## Comparison with Analytical Model
+## 🔧 Troubleshooting
 
-You can validate the MuJoCo simulation against the analytical model from UR5.py:
+| Issue | Cause | Solution |
+|-------|-------|----------|
+| "Module not found" | Missing dependencies | `pip install mujoco numpy sympy matplotlib` |
+| No display/viewer | SSH/headless system | Use `python ur5_animation.py` |
+| UR5.py slow | Symbolic computation | Normal - wait 1-2 minutes |
+| Animation frozen | Window not responding | Close manually, check output files |
+| Import errors | Wrong environment | Check with `which python` and activate correct env |
 
-```python
-# 1. Set same joint configuration in both
-# 2. Extract M, C, G from MuJoCo
-# 3. Substitute q values in SymPy expressions from UR5.py
-# 4. Compare numerical values
+## 📚 References
+
+- [Universal Robots UR5 Specifications](https://www.universal-robots.com/products/ur5-robot/)
+- [MuJoCo Documentation](https://mujoco.readthedocs.io)
+- [SymPy Documentation](https://docs.sympy.org)
+- Denavit-Hartenberg Parameters Convention
+- Featherstone, R. (2008). Rigid Body Dynamics Algorithms
+
+## 🚫 Known Issues
+
+- **MuJoCo interactive viewer** doesn't work on all systems → Use matplotlib animation
+- **PyBullet** won't compile on modern macOS → Not needed, removed from project  
+- **Coriolis matrix** file is very large (~11 MB) → This is normal for symbolic form
+- **Long computation time** for UR5.py → Symbolic manipulation is computationally intensive
+# Simulate
+for i in range(1000):
+    sim.step()
+    if i % 100 == 0:
+        state = sim.get_state()
+        print(f"Step {i}: q = {state['q']}")
 ```
 
 ## Troubleshooting

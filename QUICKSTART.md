@@ -1,68 +1,68 @@
 # UR5 Robot Simulation - Quick Start
 
-## The Problem with 3D Viewers
+## 🚀 Get Running in 2 Minutes
 
-MuJoCo's interactive viewer requires a display environment and may not work in all setups (SSH sessions, headless servers, some macOS configurations). 
+```bash
+# Install
+pip install mujoco numpy sympy matplotlib
 
-## ✅ Working Solutions
+# Run
+python UR5.py           # Compute dynamics
+python ur5_animation.py # Create visualization
+```
 
-### Option 1: Matplotlib Animation (RECOMMENDED)
+Done! Check `ur5_animation.gif` and `ur5_configurations.png`
+
+## ✅ Available Options
+
+### Option 1: Matplotlib Animation ⭐ RECOMMENDED
 **Always works, creates visual output files**
 
 ```bash
 python ur5_animation.py
 ```
 
-This will:
-- ✅ Simulate robot motion through waypoints
-- ✅ Create 3D visualization
-- ✅ Save animation as `ur5_animation.gif`
-- ✅ Save static configurations as `ur5_configurations.png`
-- ✅ Display interactive matplotlib window
+**What it does:**
+- ✅ Simulates robot motion through waypoints
+- ✅ Creates 3D visualization
+- ✅ Saves animation as `ur5_animation.gif`
+- ✅ Saves static poses as `ur5_configurations.png`
+- ✅ Opens interactive matplotlib window
 
-### Option 2: No-Viewer Mode (Headless)
-**For servers without displays**
+### Option 2: No-Viewer Mode
+**For servers without displays or batch processing**
 
 ```bash
 python ur5_simulation.py no-viewer
 ```
 
-This will:
-- ✅ Run physics simulation
-- ✅ Print dynamics (Mass matrix, Jacobian)
-- ✅ Show joint positions and end-effector location
-- ❌ No visualization
+**What it does:**
+- ✅ Runs physics simulation
+- ✅ Prints dynamics (Mass matrix, Jacobian)
+- ✅ Shows joint positions and end-effector location
+- ❌ No visualization (terminal output only)
 
-### Option 3: PyBullet (Alternative Physics Engine)
-**Different physics engine with built-in viewer**
-
-```bash
-pip install pybullet
-python ur5_simulation_pybullet.py
-```
-
-### Option 4: Interactive Launcher
+### Option 3: Interactive Launcher
 
 ```bash
 python run_simulation.py
 ```
 
-Choose from menu:
+**Menu options:**
 1. Matplotlib Animation (recommended)
-2. MuJoCo Interactive Viewer (may not work)
-3. No Viewer Mode
-4. PyBullet Simulation
+2. MuJoCo Interactive Viewer (may not open window)
+3. No Viewer Mode (headless)
 
-## What Each File Does
+## 📁 What Each File Does
 
-| File | Purpose |
-|------|---------|
-| `UR5.py` | Compute analytical dynamics (M, C, G matrices) |
-| `ur5_animation.py` | **Matplotlib 3D animation (USE THIS)** |
-| `ur5_simulation.py` | MuJoCo simulation (viewer may not work) |
-| `ur5_simulation_pybullet.py` | PyBullet alternative |
-| `run_simulation.py` | Interactive launcher |
-| `ur5_model.xml` | MuJoCo robot model |
+| File | Purpose | Output |
+|------|---------|--------|
+| `UR5.m` | Original MATLAB implementation | Reference |
+| `UR5.py` | Compute analytical dynamics | `.pkl`, `.txt` files |
+| `ur5_animation.py` | **3D animation ⭐ USE THIS** | `.gif`, `.png` |
+| `ur5_simulation.py` | MuJoCo headless simulation | Terminal output |
+| `run_simulation.py` | Interactive menu launcher | Varies |
+| `ur5_model.xml` | MuJoCo robot model definition | Used by simulations |
 
 ## Quick Examples
 
@@ -116,32 +116,44 @@ for frame in trajectory:
     print(f"Time: {frame['time']:.3f}, EE: {frame['ee_pos']}")
 ```
 
-## Troubleshooting
+## 🔧 Troubleshooting
 
-**"No display found"** → Use `ur5_animation.py` (matplotlib) or `ur5_simulation.py no-viewer`
+| Issue | Solution |
+|-------|----------|
+| "No display found" | Use `python ur5_animation.py` or add `no-viewer` flag |
+| "MuJoCo viewer error" | Normal - use matplotlib animation instead |
+| "Module not found" | `pip install mujoco numpy sympy matplotlib pillow` |
+| Animation window frozen | Close manually, check for output `.gif`/`.png` files |
+| UR5.py takes forever | Normal - symbolic computation takes 30-120 seconds |
+| PyBullet won't install | Not needed - use MuJoCo and matplotlib instead |
 
-**"MuJoCo viewer error"** → Use `ur5_animation.py` instead
+## 📤 Output Files
 
-**"Module not found"** → 
-```bash
-pip install mujoco numpy matplotlib pillow
-```
+After running the tools:
 
-**Animation window doesn't show** → Close it manually if frozen, check for `ur5_animation.gif` and `ur5_configurations.png` files
+| File | Size | Description |
+|------|------|-------------|
+| `UR5.pkl` | ~173 KB | Symbolic dynamics (M, C, G, Jacobian) |
+| `UR5M.txt` | ~421 KB | Mass matrix (text format) |
+| `UR5C.txt` | ~11 MB | Coriolis matrix (large, symbolic) |
+| `UR5G.txt` | ~2.7 KB | Gravity vector |
+| `UR5J.txt` | ~4.7 KB | Jacobian matrix |
+| `UR5T.txt` | ~3.4 KB | Forward kinematics |
+| `ur5_animation.gif` | Varies | Animated motion |
+| `ur5_configurations.png` | Varies | Static poses |
 
-## Output Files
+## 🎯 Decision Guide
 
-After running simulations:
+**I want to...**
 
-- `UR5.pkl` - Symbolic dynamics (M, C, G, Jacobian)
-- `UR5T.txt`, `UR5M.txt`, `UR5C.txt`, `UR5G.txt`, `UR5J.txt` - Text format
-- `ur5_animation.gif` - Animated robot motion
-- `ur5_configurations.png` - Static robot poses
+→ **See the robot move** → `python ur5_animation.py`  
+→ **Get dynamics equations** → `python UR5.py` then load `UR5.pkl`  
+→ **Run without graphics** → `python ur5_simulation.py no-viewer`  
+→ **Not sure what to do** → `python run_simulation.py`
 
-## Summary
+## ⚠️ Known Limitations
 
-**Want visualization?** → Use `python ur5_animation.py`
-
-**Want data/dynamics?** → Use `python UR5.py` then load `UR5.pkl`
-
-**No display available?** → Use `python ur5_simulation.py no-viewer`
+- MuJoCo interactive viewer doesn't work on all systems (use matplotlib instead)
+- PyBullet compilation fails on modern macOS (not needed)
+- Coriolis matrix file is very large (~11 MB) due to symbolic complexity
+- Symbolic computation in UR5.py takes time (~1-2 minutes)
