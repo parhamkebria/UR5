@@ -121,14 +121,33 @@ M_numeric = M.subs(q_vals)
 
 ## 🔧 Troubleshooting
 
-**"No display found"**  
-→ Use `python ur5_animation.py` or `python ur5_simulation.py no-viewer`
+**"No display found" or "MuJoCo viewer doesn't open"**  
+→ **Why:** MuJoCo's interactive viewer (`mujoco.viewer.launch_passive`) requires an active display environment. It won't work in SSH sessions, headless servers, or some macOS/Linux configurations.  
+→ **Solution:** Use `python ur5_animation.py` (matplotlib-based, always works) or `python ur5_simulation.py no-viewer` (headless mode)
 
 **"Module not found"**  
 → Install missing packages: `pip install mujoco numpy sympy matplotlib`
 
 **Computation takes long time**  
 → Normal for symbolic computation (~30 seconds to 2 minutes)
+
+**MuJoCo is installed but simulation doesn't show window**  
+→ MuJoCo physics engine works fine (headless mode proves this). Only the GUI viewer has display requirements. The physics simulation, dynamics computation, and all calculations work correctly without the viewer.
+
+## ℹ️ About MuJoCo Viewer
+
+**What works:** ✅ MuJoCo physics simulation, dynamics, control, everything computational  
+**What doesn't:** ❌ Interactive 3D viewer window (display environment required)  
+
+**Why this happens:**
+- MuJoCo viewer uses OpenGL and requires a display server
+- SSH sessions, Docker containers, cloud servers don't have displays
+- Some macOS/Linux configurations have graphics driver issues
+
+**What to use instead:**
+- `ur5_animation.py` - Full 3D visualization with matplotlib (saves GIF/PNG)
+- `ur5_simulation.py no-viewer` - All physics/dynamics without graphics
+- Both options give you complete functionality!
 
 ## � Citation
 
