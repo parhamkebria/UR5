@@ -17,7 +17,7 @@ m = [3.7, 8.393, 2.275, 1.219, 1.219, 0.1879]
 p_c1 = np.array([0, -1.93, -26.51]) * 1e-3
 p_c2 = np.array([212.5, 0, 113.36]) * 1e-3
 p_c3 = np.array([272.32, 0, 26.5]) * 1e-3
-p_c4 = np.array([0, 16, 34.107, 35]) * 1e-3  # Note: MATLAB had 4 elements, using first 3 + average
+p_c4 = np.array([0, 16, 34.107]) * 1e-3  # Note: MATLAB had 4 elements, using first 3
 p_c5 = np.array([0, -16.34, -1.8]) * 1e-3
 p_c6 = np.array([0, 0, -1.159]) * 1e-3
 
@@ -34,12 +34,12 @@ alpha_0, alpha_1, alpha_2, alpha_3, alpha_4, alpha_5 = alpha
 a_0, a_1, a_2, a_3, a_4, a_5 = a
 d_1, d_2, d_3, d_4, d_5, d_6 = d
 
-p_cx1, p_cy1, p_cz1 = sp.nsimplify([float(p_c1[0]), float(p_c1[1]), float(p_c1[2])], rational=False)
-p_cx2, p_cy2, p_cz2 = sp.nsimplify([float(p_c2[0]), float(p_c2[1]), float(p_c2[2])], rational=False)
-p_cx3, p_cy3, p_cz3 = sp.nsimplify([float(p_c3[0]), float(p_c3[1]), float(p_c3[2])], rational=False)
-p_cx4, p_cy4, p_cz4 = sp.nsimplify([float(p_c4[0]), float(p_c4[1]), float(p_c4[2])], rational=False)
-p_cx5, p_cy5, p_cz5 = sp.nsimplify([float(p_c5[0]), float(p_c5[1]), float(p_c5[2])], rational=False)
-p_cx6, p_cy6, p_cz6 = sp.nsimplify([float(p_c6[0]), float(p_c6[1]), float(p_c6[2])], rational=False)
+p_cx1, p_cy1, p_cz1 = float(p_c1[0]), float(p_c1[1]), float(p_c1[2])
+p_cx2, p_cy2, p_cz2 = float(p_c2[0]), float(p_c2[1]), float(p_c2[2])
+p_cx3, p_cy3, p_cz3 = float(p_c3[0]), float(p_c3[1]), float(p_c3[2])
+p_cx4, p_cy4, p_cz4 = float(p_c4[0]), float(p_c4[1]), float(p_c4[2])
+p_cx5, p_cy5, p_cz5 = float(p_c5[0]), float(p_c5[1]), float(p_c5[2])
+p_cx6, p_cy6, p_cz6 = float(p_c6[0]), float(p_c6[1]), float(p_c6[2])
 
 m_1, m_2, m_3, m_4, m_5, m_6 = m
 q_1, q_2, q_3, q_4, q_5, q_6 = symbols('q_1 q_2 q_3 q_4 q_5 q_6')
@@ -141,12 +141,12 @@ z_zeros_3 = zeros(3, 3)
 z_zeros_2 = zeros(3, 2)
 z_zeros_1 = zeros(3, 1)
 
-J_o1 = Matrix.hstack(R_1[:, 2], z_zeros_5)
-J_o2 = Matrix.hstack(R_1[:, 2], R_20[:, 2], z_zeros_4)
-J_o3 = Matrix.hstack(R_1[:, 2], R_20[:, 2], R_30[:, 2], z_zeros_3)
-J_o4 = Matrix.hstack(R_1[:, 2], R_20[:, 2], R_30[:, 2], R_40[:, 2], z_zeros_2)
-J_o5 = Matrix.hstack(R_1[:, 2], R_20[:, 2], R_30[:, 2], R_40[:, 2], R_50[:, 2], z_zeros_1)
-J_o6 = Matrix.hstack(R_1[:, 2], R_20[:, 2], R_30[:, 2], R_40[:, 2], R_50[:, 2], R_60[:, 2])
+J_o1 = Matrix.hstack(R_1.col(2), z_zeros_5)
+J_o2 = Matrix.hstack(R_1.col(2), R_20.col(2), z_zeros_4)
+J_o3 = Matrix.hstack(R_1.col(2), R_20.col(2), R_30.col(2), z_zeros_3)
+J_o4 = Matrix.hstack(R_1.col(2), R_20.col(2), R_30.col(2), R_40.col(2), z_zeros_2)
+J_o5 = Matrix.hstack(R_1.col(2), R_20.col(2), R_30.col(2), R_40.col(2), R_50.col(2), z_zeros_1)
+J_o6 = Matrix.hstack(R_1.col(2), R_20.col(2), R_30.col(2), R_40.col(2), R_50.col(2), R_60.col(2))
 
 # JACOBIAN MATRIX OF THE END-EFFECTOR
 Jacobi = Matrix.vstack(J_v6, J_o6)
