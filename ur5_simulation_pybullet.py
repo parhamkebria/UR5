@@ -33,11 +33,11 @@ class UR5SimulationPyBullet:
         # Load ground plane
         self.plane_id = p.loadURDF("plane.urdf")
         
-        # Create UR5 robot from scratch using DH parameters
-        self.robot_id = self.create_ur5_robot()
-        
         # Joint information
         self.n_joints = 6
+        
+        # Create UR5 robot from scratch using DH parameters
+        self.robot_id = self.create_ur5_robot()
         self.joint_indices = list(range(self.n_joints))
         self.joint_names = [
             'shoulder_pan', 'shoulder_lift', 'elbow',
@@ -91,7 +91,7 @@ class UR5SimulationPyBullet:
         link_inertial_frame_orientations.append([0, 0, 0, 1])
         joint_types.append(p.JOINT_REVOLUTE)
         joint_axes.append([0, 0, 1])
-        parent_indices.append(0)
+        parent_indices.append(0)  # Parent is base
         
         # Link 2: Upper arm
         visual_shapes.append(p.createVisualShape(
@@ -111,7 +111,7 @@ class UR5SimulationPyBullet:
         link_inertial_frame_orientations.append([0, 0, 0, 1])
         joint_types.append(p.JOINT_REVOLUTE)
         joint_axes.append([0, 1, 0])
-        parent_indices.append(1)
+        parent_indices.append(0)  # Parent is link 1 (index 0 in link list)
         
         # Link 3: Forearm
         visual_shapes.append(p.createVisualShape(
@@ -131,7 +131,7 @@ class UR5SimulationPyBullet:
         link_inertial_frame_orientations.append([0, 0, 0, 1])
         joint_types.append(p.JOINT_REVOLUTE)
         joint_axes.append([0, 1, 0])
-        parent_indices.append(2)
+        parent_indices.append(1)  # Parent is link 2
         
         # Link 4: Wrist 1
         visual_shapes.append(p.createVisualShape(
@@ -151,7 +151,7 @@ class UR5SimulationPyBullet:
         link_inertial_frame_orientations.append([0, 0, 0, 1])
         joint_types.append(p.JOINT_REVOLUTE)
         joint_axes.append([0, 0, 1])
-        parent_indices.append(3)
+        parent_indices.append(2)  # Parent is link 3
         
         # Link 5: Wrist 2
         visual_shapes.append(p.createVisualShape(
@@ -171,7 +171,7 @@ class UR5SimulationPyBullet:
         link_inertial_frame_orientations.append([0, 0, 0, 1])
         joint_types.append(p.JOINT_REVOLUTE)
         joint_axes.append([0, 1, 0])
-        parent_indices.append(4)
+        parent_indices.append(3)  # Parent is link 4
         
         # Link 6: Wrist 3
         visual_shapes.append(p.createVisualShape(
@@ -191,7 +191,7 @@ class UR5SimulationPyBullet:
         link_inertial_frame_orientations.append([0, 0, 0, 1])
         joint_types.append(p.JOINT_REVOLUTE)
         joint_axes.append([0, 0, 1])
-        parent_indices.append(5)
+        parent_indices.append(4)  # Parent is link 5
         
         # Create base
         base_visual = p.createVisualShape(
@@ -228,6 +228,9 @@ class UR5SimulationPyBullet:
         # Set joint damping
         for i in range(self.n_joints):
             p.changeDynamics(robot_id, i, linearDamping=0.04, angularDamping=0.04)
+            # Disable collisions between adjacent links
+            if i > 0:
+                p.setCollisionFilterPair(robot_id, robot_id, i-1, i, 0)
         
         return robot_id
     
@@ -307,6 +310,11 @@ def run_pybullet_simulation():
     # Reset to home position
     q_home = np.array([0, -np.pi/4, np.pi/2, -np.pi/4, -np.pi/2, 0])
     sim.reset(q_home)
+    
+    # Let the robot settle before starting control
+    for _ in range(100):
+        p.stepSimulation()
+        time.sleep(0.001)
     
     print("\nRobot will move through predefined waypoints")
     print("Close the window to exit\n")
