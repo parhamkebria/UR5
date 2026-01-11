@@ -121,11 +121,13 @@ for frame in trajectory:
 | Issue | Solution |
 |-------|----------|
 | "No display found" | Use `python ur5_animation.py` or add `no-viewer` flag |
-| "MuJoCo viewer error" | Normal - use matplotlib animation instead |
+| "MuJoCo viewer error" | On **macOS**: use `mjpython ur5_simulation.py` instead of `python` |
 | "Module not found" | `pip install mujoco numpy sympy matplotlib pillow` |
 | Animation window frozen | Close manually, check for output `.gif`/`.png` files |
 | UR5.py takes forever | Normal - symbolic computation takes 30-120 seconds |
 | PyBullet won't install | Not needed - use MuJoCo and matplotlib instead |
+
+**💡 macOS MuJoCo Viewer:** Use `mjpython ur5_simulation.py` instead of `python` to enable the interactive 3D viewer.
 
 ## 📤 Output Files
 

@@ -130,6 +130,16 @@ M_numeric = M.subs(q_vals)
 **Computation takes long time**  
 → Normal for symbolic computation (~30 seconds to 2 minutes)
 
+**🍎 MuJoCo GUI on macOS: "requires mjpython"**  
+→ On macOS, MuJoCo viewer requires `mjpython` instead of `python`:
+```bash
+mjpython ur5_simulation.py
+```
+If `mjpython` is not available, install it with MuJoCo or use the matplotlib alternative:
+```bash
+python ur5_animation.py  # Works with regular python
+```
+
 ## � Citation
 
 If you use this work in your research, please cite:

@@ -1,6 +1,14 @@
 """
 UR5 Robot Simulation using MuJoCo
+
 This script simulates the UR5 robot arm with interactive control and visualization.
+
+Usage:
+    macOS:         mjpython ur5_simulation.py
+    Linux/Windows: python ur5_simulation.py
+    Headless:      python ur5_simulation.py no-viewer
+
+Note: On macOS, the MuJoCo viewer requires 'mjpython' instead of 'python'.
 """
 
 import numpy as np
