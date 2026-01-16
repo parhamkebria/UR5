@@ -1,4 +1,4 @@
-# UR5 Robot Dynamics and Simulation
+# UR5 Robot Dynamics and Kinematics
 
 <div style="display: flex; align-items: center; gap: 20px;">
   <div style="flex: 1;">
