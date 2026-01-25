@@ -252,6 +252,6 @@ If you use this work in your research, please cite:
 
 **Paper:** [IEEE Xplore](https://doi.org/10.1109/SMC.2016.7844896)
 
-## �📄 License
+## 📄 License
 
 See `LICENSE` and `license.txt` for details.
