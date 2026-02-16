@@ -254,4 +254,4 @@ If you use this work in your research, please cite:
 
 ## 📄 License
 
-See `LICENSE` and `license.txt` for details.
+See [LICENSE](https://github.com/parhamkebria/UR5/blob/main/LICENSE) for details.
